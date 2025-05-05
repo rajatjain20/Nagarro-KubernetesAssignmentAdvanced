@@ -1,0 +1,22 @@
+/*
+Enter custom T-SQL here that would run after SQL Server has started up. 
+*/
+
+ALTER LOGIN SA WITH PASSWORD='admin@1234';
+GO
+CREATE DATABASE USERDATA;
+GO
+CREATE TABLE USERDATA.dbo.USERINFO(ID INT NOT NULL PRIMARY KEY, NAME VARCHAR(50) NOT NULL);
+GO
+CREATE LOGIN userdataapp1 WITH PASSWORD = 'UserDataApp@123';
+GO
+CREATE LOGIN userdataapp2 WITH PASSWORD = 'UserDataApp@123';
+GO
+USE USERDATA;
+GO
+CREATE USER userdataapp1 FOR LOGIN userdataapp1;
+GO
+CREATE USER userdataapp2 FOR LOGIN userdataapp2;
+GO
+GRANT SELECT, INSERT, UPDATE, DELETE ON dbo.USERINFO TO userdataapp2;
+GO

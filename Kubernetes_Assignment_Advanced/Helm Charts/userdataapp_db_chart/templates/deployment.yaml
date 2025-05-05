@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appname }}
+  labels:
+    app: {{ .Values.appname }}
+    version: "{{ .Chart.AppVersion }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  
+  selector:
+    matchLabels:
+      app: {{ .Values.appname }}
+
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appname }}
+        version: "{{ .Chart.AppVersion }}"
+      
+      # This checksum will change if the ConfigMap changes, which will trigger a rollout of a pod template 
+      annotations:
+        configmap-checksum: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+
+    spec:
+      containers:
+        - name: {{ .Values.containerName }}
+          image: "{{ .Values.image.repository}}:{{.Values.image.tag | default .Chart.AppVersion }}" 
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: db-port
+              containerPort: 1433
+              protocol: TCP
+
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          env:
+            - name: MSSQL_SA_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configMap.name }}
+                  key: MSSQL_SA_PASSWORD
+            # - name: MSSQL_SA_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: {{ .Values.secret.name }}
+            #       key: MSSQL_SA_PASSWORD
+          
+          # volumeMounts:
+          #   - name: {{ .Values.pvcInfo.volumeName }}
+          #     mountPath: {{ .Values.pvcInfo.mountPath }}       # path where mssql stores data
+
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      # volumes:
+      #   - name: {{ .Values.pvcInfo.volumeName }}
+      #     persistentVolumeClaim:
+      #       claimName:  {{ .Values.pvcInfo.pvcName }}
+      
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+             
+

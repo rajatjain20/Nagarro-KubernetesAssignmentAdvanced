@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name }}
+spec:
+  #type: {{ .Values.service.type }}     # default type would be ClusterIP
+  ports:
+    - port: {{ .Values.service.port }}        # exposed port to access application externally
+      targetPort: {{ .Values.service.port }}  # application port
+      protocol: TCP
+  clusterIP: None         # Optional: for headless service (stateful)
+
+  selector:
+    app: {{ .Values.appname }}
+    version: "{{ .Chart.AppVersion }}"

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.name }}
+data:
+  
+  ENV_NAME: {{- if .Values.environment.env_uat }}
+              {{ .Values.environment.uat_name }}
+            {{- else if .Values.environment.env_prod }}
+              {{ .Values.environment.prod_name }}
+            {{- else }}
+              {{ .Values.environment.dev_name }}
+            {{- end }}
+  PORT: "3030"
+  MSSQL_SERVER: service-userdataapp-db
+  MSSQL_DBNAME: UserData
+  # MSSQL_USER: sa
+  # MSSQL_PASS: admin@1234

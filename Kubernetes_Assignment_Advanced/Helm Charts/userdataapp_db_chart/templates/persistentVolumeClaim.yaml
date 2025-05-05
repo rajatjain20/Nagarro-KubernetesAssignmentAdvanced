@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pvcInfo.pvcName }}
+  annotations:
+    "helm.sh/resource-policy": keep     # this is to keep the persistent volume event after helm uninstall
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvcInfo.storage | default "1Gi" }}

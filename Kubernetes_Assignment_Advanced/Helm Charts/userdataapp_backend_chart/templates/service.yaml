@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.clusterip.name }}
+spec:
+  type: {{ .Values.service.clusterip.type }}
+  ports:
+    - port: {{ .Values.service.clusterip.port }}        # exposed port to access application externally
+      targetPort: {{ .Values.service.clusterip.port }}  # application port
+      protocol: TCP
+  selector:
+    app: {{ .Values.appname }}
+    version: "{{ .Chart.AppVersion }}"

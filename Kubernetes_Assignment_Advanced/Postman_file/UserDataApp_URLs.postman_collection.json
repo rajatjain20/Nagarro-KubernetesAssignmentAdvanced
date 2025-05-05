@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "a8bfe666-6c39-4fc5-bc5a-0e6a09163d98",
+		"name": "UserDataApp_URLs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39174499"
+	},
+	"item": [
+		{
+			"name": "UserDataApp_Backend_checkDB",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:57303/checkDB",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57303",
+					"path": [
+						"checkDB"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserDataApp_Backend_getUserInfo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:57303/getUserInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57303",
+					"path": [
+						"getUserInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserDataApp_Backend_addUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"id\": 1, \"name\": \"Rajat K Jain\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:57303/addUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57303",
+					"path": [
+						"addUser"
+					]
+				},
+				"description": "update port number as assigned by kubernetes, whenever run backend service from kubernetes."
+			},
+			"response": []
+		},
+		{
+			"name": "UserDataApp_Backend_getUserInfo_by_ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:57303/getUserInfo?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57303",
+					"path": [
+						"getUserInfo"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userdataapp-backend
+  labels:
+    app: {{ .Values.appname }}
+    version: "{{ .Chart.AppVersion }}"
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  
+  selector:
+    matchLabels:
+      app: {{ .Values.appname }}
+
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appname }}
+        version: "{{ .Chart.AppVersion }}"
+      
+      # This checksum will change if the ConfigMap changes, which will trigger a rollout of a pod template 
+      annotations:
+        configmap-checksum: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        secret-checksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+
+    spec:
+      containers:
+        - name: {{ .Values.containerName }}
+          image: "{{ .Values.image.repository}}:{{.Values.image.tag | default .Chart.AppVersion }}" 
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: backend-port
+              containerPort: 3030
+              protocol: TCP
+
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }} 
+          
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          env:
+            - name: ENV_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configMap.name }}
+                  key: ENV_NAME
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configMap.name }}
+                  key: PORT
+            - name: MSSQL_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configMap.name }}
+                  key: MSSQL_SERVER
+            - name: MSSQL_DBNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configMap.name }}
+                  key: MSSQL_DBNAME
+            # - name: MSSQL_USER
+            #   valueFrom:
+            #     configMapKeyRef:
+            #       name: {{ .Values.configMap.name }}
+            #       key: MSSQL_USER
+            # - name: MSSQL_PASS
+            #   valueFrom:
+            #     configMapKeyRef:
+            #       name: {{ .Values.configMap.name }}
+            #       key: MSSQL_PASS
+            - name: MSSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{- if eq .Values.secret.select "user1"}}
+                          {{ .Values.secret.name1 }}
+                        {{- else }}
+                          {{ .Values.secret.name2 }}
+                        {{- end }}
+                  key: username
+            - name: MSSQL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{- if eq .Values.secret.select "user1"}}
+                          {{ .Values.secret.name1 }}
+                        {{- else }}
+                          {{ .Values.secret.name2 }}
+                        {{- end }}
+                  key: password
+

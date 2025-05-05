@@ -1,0 +1,8 @@
+
+# define backend services
+services:
+  backend:
+    image: rajatjain20/userdataapp_backend:${BACKEND_VERSION}
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
