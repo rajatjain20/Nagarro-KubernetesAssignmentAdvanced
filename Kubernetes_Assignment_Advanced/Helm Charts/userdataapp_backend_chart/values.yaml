@@ -31,8 +31,8 @@ configMap:
 secret:
   name1: secret-userdataapp-backend1
   name2: secret-userdataapp-backend2
-  #select: user1       # user data, which doesn't have permission to perform Select and Insert in DB.
-  select: user2     # user data, which has permission to perform Select and Insert in DB.
+  select: user1       # user data, which doesn't have permission to perform Select and Insert in DB.
+  #select: user2     # user data, which has permission to perform Select and Insert in DB.
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
