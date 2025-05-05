@@ -217,9 +217,9 @@ Update the port, picked from browser, in each endpoint's http API requests.
     Now try on Postman again. The permission issue must be resolved again.
 
 
-### Implementation of persistent storage using Kubernetes PersistentVolumes and PersistentVolumeClaims to ensure data persistence across pod restarts
+### `Bonus Question:` Implementation of persistent storage using Kubernetes PersistentVolumes and PersistentVolumeClaims to ensure data persistence across pod restarts
 
-- For persistence volume, we have following tags in our db helm chart: 
+- For persistence volume, I have added following tags in our db helm chart: 
 
 **`.\Helm Charts\userdataapp_db_chart\values.yaml`**
 <pre>
