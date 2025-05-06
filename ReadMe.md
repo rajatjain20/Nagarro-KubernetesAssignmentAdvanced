@@ -2,6 +2,9 @@
 
 **`Note:`** I have installed Kubernetes and minikube on my windows machine. (Refer Installation_kubernetes.docx`) 
 
+Start Minikube using the following command:
+<pre>minikube start --driver=docker </pre>
+
 ## Overview 
 <pre> 📁 Kubernetes_Assignment_Advanced/
        ├── 📁 Helm Charts/
