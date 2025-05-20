@@ -9,4 +9,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.pvcInfo.storage | default "1Gi" }}
+      storage: {{ .Values.pvcInfo.storage | default "2Gi" }}
